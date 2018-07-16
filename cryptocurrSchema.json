@@ -1,0 +1,92 @@
+[
+ {
+   "description": "USD Price",
+   "name": "quotes_USD_price",
+   "type": "FLOAT",
+   "mode": "NULLABLE"
+ },
+ {
+   "description": "Best approximation of the number of coins that are circulating in the market and in the general public's hands",
+   "name": "circulating_supply",
+   "type": "NUMERIC",
+   "mode": "NULLABLE"
+ },
+ {
+    "description": "Cryptocurrency Id",
+    "name": "id",
+    "type": "NUMERIC",
+    "mode": "REQUIRED"
+ },
+ {
+    "description": "Percentage change in USD price in last 7 days",
+    "name": "quotes_USD_percent_change_7d",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Ticker symbol for the cryptocurrency",
+    "name": "symbol",
+    "type": "STRING",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "",
+    "name": "website_slug",
+    "type": "STRING",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Best approximation of the maximum amount of coins that will ever exist in the lifetime of the cryptocurrency",
+    "name": "max_supply",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Amount of the coin that has been traded in the last 24 hours in $",
+    "name": "quotes_USD_volume_24h",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+ },
+ {
+  "description": "Percentage change in USD price in last 1 hour",
+  "name": "quotes_USD_percent_change_1h",
+  "type": "FLOAT",
+  "mode": "NULLABLE"
+},
+ {
+    "description": "Name of the cryptocurrency",
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "",
+    "name": "last_updated",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Total amount of coins in existence right now (minus any coins that have been verifiably burned)",
+    "name": "total_supply",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Rank of the cryptocurrency by market capitalisation",
+    "name": "curr_rank",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Percentage change in USD price in last 24 hours",
+    "name": "quotes_USD_percent_change_24h",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+ },
+ {
+    "description": "Market Capitlisation of the cryptocurrency",
+    "name": "quotes_USD_market_cap",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+ }
+]
