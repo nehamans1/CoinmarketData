@@ -3,6 +3,7 @@ import csv
 import json
 import time
 
+#Using Listings endpoint to fetch all listed cryptocurrencies
 cryptocurrListings = {}
 cryptocurrListingsMetadata = {}
 url1 = "https://api.coinmarketcap.com/v2/listings/"
@@ -14,54 +15,37 @@ try:
 except:
     print("Exception while getting all cryptocurrency listings")
 
-
-def check_startId_valid(startId):
-    idInValid = True
-    print("Inside the function: " + str(startId))
-    tmp_dict = {}
-
-    while(idInValid):
-        try:
-            url3 = url2 + str(startId) + "/"
-            response = requests.get(url3)
-            data = response.json()
-            print("Inside try statement:")
-            tmp_dict.update(data["data"])
-            idInValid = False
-        except:
-            print("Exception: Id " + str(startId))
-            idInValid = True
-            startId += 1
-    print("End of function " + str(startId))
-    return startId
-            
-# Pull current data for all cryptocurrencies using the 'id' field
-# Make a get request to get the cryptocurrency ticker data in order of rank using the 'ticker' endpoint.
+# Pull current data for each of the listed cryptocurrencies using the 'id' field
 url2 = "https://api.coinmarketcap.com/v2/ticker/"
 
 start = 1
 maxCalls = 30
 cryptocurrdata = {}
 
-for i in range(1, 21):
-    #As there is a limit of 30 calls per minute, pausing the code for sometime after every 30 calls
-    if(i % maxCalls == 0):
+for eachId in cryptocurrListings:
+    print("Iteration Number: " + str(start))
+    print("Id: " + str(eachId["id"]))
+    #As there is a limit of 30 calls per minute, pausing the code for sometime after every 30 calls using the 'start' counter
+    if(start % maxCalls == 0):
         print("Going to sleep for 60 seconds after 30 calls")
         time.sleep(60)
     
-    start = check_startId_valid(start)
-
-    parameters = {"start": start} 
+    #parameters = {"start": eachIdls["id"], "limit":1} 
     try:
-        response = requests.get(url2, params=parameters)
+        response = requests.get(url2+str(eachId["id"])+"/")
+        #response = requests.get("https://api.coinmarketcap.com/v2/ticker/101/")
         data = response.json()
-        cryptocurrdata.update(data["data"])
+        cryptocurrdata[eachId["id"]] = data["data"]
+        with open('data.txt', 'w') as outfilejson:  
+            json.dump(cryptocurrdata, outfilejson)
     except:
-        print("Exception in main for loop: Id " + str(start))
+        print("Exception: Id " + str(eachId["id"]))
         
-    start += 100
+    start += 1
 
-outfile = open("cryptocurrencydata.csv", "a+")
+###########################################################################################################################
+#####Once all data is fetched using the APIs, writing the json to a csv file###############################################
+outfile = open("cryptocurrencydata.csv", "w")
 csvwriter = csv.writer(outfile)
 
 count = 0
@@ -79,16 +63,23 @@ for row in cryptocurrdata:
     quotes_dict = {}
     #Iterating over each currency using the list
     for elem in quote_keys:
+        #For each currency, getting all the information i.e. all key/values in a dict
         quotes_dict = item["quotes"][elem]
         newkey = ""
+        #Converting this dict to a list for modifying the key names at the same time as iterating over the dict. If not converted
+        #to a list then iterating over the dict and modifying at the same time leads to errors in Python 3
         orig_keys = list(quotes_dict)
+        #Iterating over each key and renaming it to 'quotes_<curr>_<key>'
         for k in orig_keys:
             newkey = "quotes" + "_" + elem + "_" + k
             quotes_dict[newkey] = quotes_dict.pop(k)
         
+        #Creating a new dict and updating it with the renamed & flattened 'quotes'
         flattened_item.update(quotes_dict)
 
+    #Removing the nested 'quotes' dict from the original dict
     del item["quotes"]
+    #Adding the remaining keys from the original dict to the new flattened dict
     flattened_item.update(item)
     ######End of code to flatten the response json#################################################################
       
@@ -101,4 +92,5 @@ for row in cryptocurrdata:
     csvwriter.writerow(flattened_item.values())
  
 outfile.close()
-
+#####End of writing json to csv file###############################################
+###########################################################################################################################
